@@ -52,14 +52,14 @@ void handleKeypress() {
 void handleSpclCharPress(char c) {
     switch (c){
         case K_UP : {
-            if (y == 0) x = 0;            
+            if (y == 0) { x = 0; break;}
             y --;
             x = min(x, lineArr[y]->currLen - 1);
             break;
         }
 
         case K_DOWN : {
-            if (y == nLines) x = lineArr[y]->currLen - 1;
+            if (y >= nLines) x = lineArr[y]->currLen - 1;
             y ++;
             x = min(x, lineArr[y]->currLen - 1);
             break;
@@ -75,7 +75,7 @@ void handleSpclCharPress(char c) {
         }
 
         case K_RIGHT : {
-            if (x == lineArr[y]->currLen - 1) {
+            if (x >= lineArr[y]->currLen - 1) {
                 if (y == nLines) break;
                 y ++;
                 x = 0;
