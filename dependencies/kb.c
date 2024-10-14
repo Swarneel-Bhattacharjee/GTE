@@ -1,3 +1,4 @@
+#include <string.h>
 #include "kb.h"
 #include "scr.h"
 #include "mem.h"
@@ -81,6 +82,44 @@ void handleSpclCharPress(char c) {
                 x = 0;
             } else x ++;
             break;
+        }
+        
+        case K_DELETE : {
+            if (x >= lineArr[y]->currLen - 1) {
+              if (y >= nLines - 1) break;
+              else {
+                // Remove the newline character
+                x ++;
+                memCharShiftLeft();
+                x --;
+                
+                // Copy the line underneath
+                char cpy[MAXCHARBUFLEN];
+                memset(cpy, 0, sizeof(char) * MAXCHARBUFLEN);
+                y ++;
+                int x_ = 0;
+                char c;
+                while ((c = lineArr[y]->lineBuf[x_]) != 0){
+                  cpy[x_ ++] = c;
+                }
+
+                // Remove the lower line
+                removeThisLine();
+                
+                x_ = 0;
+                // paste the copied contents at the end of this line
+                while ((c = cpy[x_++]) != 0) {
+                  insertIntoCurrentLine(c);
+                }
+              }
+            } else {
+                delch();
+                x ++;
+                memCharShiftLeft();
+                x --;
+                lineArr[y]->currLen - 1;
+                break;
+            }
         }
     }
 
