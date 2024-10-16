@@ -86,21 +86,6 @@ void handleSpclCharPress(char c) {
             } else x ++;
             break;
         }
-        
-        case K_DELETE : {
-            if (x < lineArr[y]->currLen - 1) {
-                x ++;
-                delPrevChar();
-            } else {
-                x ++;
-                delPrevChar();
-                y ++;
-                x = 0;
-                joinWithPrevLine();
-            }
-
-            break;
-        }
     }
 
     move(y, x);
