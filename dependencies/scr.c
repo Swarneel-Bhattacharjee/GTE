@@ -18,13 +18,34 @@ void delPrevChar() {
     x --;
     move(y, x);
     delch();
+    lineArr[y]->currLen --;
 }
 
-void removeThisLine() {
+void joinWithPrevLine() {
+    // Copy the remaining line
+    char cpy[MAXCHARBUFLEN];
+    memset(cpy, 0, sizeof(char) * MAXCHARBUFLEN);
+    int i = x;
+    char c;
+    while ((c = lineArr[y]->lineBuf[i]) != 0) cpy[i++] = c;
+
+    //delete this line
+    y ++;
     memLineShiftUp();
+    nLines --;
+    y --;
     deleteln();
     y --;
     x = lineArr[y]->currLen - 1;
+
+    // Join the content from last \n character (included) to the end of the lineo
+    x++;
+    delPrevChar();
+    int x_ = x;
+    for (int j = 0; j < i; j ++) insertIntoCurrentLine(cpy[j]);
+
+    // Move cursor back to where the last newLine character should have been
+    x = x_;
     move(y, x);
 }
 

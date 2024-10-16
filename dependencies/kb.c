@@ -1,3 +1,4 @@
+#include <string.h>
 #include "kb.h"
 #include "scr.h"
 #include "mem.h"
@@ -17,8 +18,11 @@ void handleKeypress() {
         }
 
         case K_BCKSPC : {
-            if (x > 0) delPrevChar();
-            else removeThisLine();
+            if (x > 0) delPrevChar(); 
+            else {
+                if (y == 0) break;
+                joinWithPrevLine(); 
+            }
             break;
         }
 
@@ -80,6 +84,21 @@ void handleSpclCharPress(char c) {
                 y ++;
                 x = 0;
             } else x ++;
+            break;
+        }
+        
+        case K_DELETE : {
+            if (x < lineArr[y]->currLen - 1) {
+                x ++;
+                delPrevChar();
+            } else {
+                x ++;
+                delPrevChar();
+                y ++;
+                x = 0;
+                joinWithPrevLine();
+            }
+
             break;
         }
     }

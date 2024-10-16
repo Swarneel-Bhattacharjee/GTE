@@ -8,5 +8,6 @@ void insertIntoCurrentLine(char ch);
 void addNewLineUnder();
 void delPrevChar();
 void removeThisLine();
+void joinWithPrevLine();
 
 #endif
