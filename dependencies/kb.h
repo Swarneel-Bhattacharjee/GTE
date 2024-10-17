@@ -11,6 +11,13 @@
 #define K_DOWN      'P'
 #define K_LEFT      'K'
 #define K_DELETE    'S'
+#define K_HOME      'G'
+#define K_END       'O'
+#define K_PGUP      'I'
+#define K_PGDWN     'Q'
+#define CTRL_Z      26
+#define CTRL_X      24
+#define CTRL_C      3
 
 
 enum ASCII {

@@ -99,6 +99,28 @@ void handleSpclCharPress(char c) {
             }
             break;
         }
+
+        case K_HOME : {
+            x = 0;
+            break;
+        }
+
+        case K_END : {
+            x = lineArr[y]->currLen - 1;
+            break;
+        }
+
+        case K_PGUP :{
+            y = 0;
+            x = min(x, lineArr[y]->currLen - 1);
+            break;
+        }
+
+        case K_PGDWN : {
+            y = nLines - 1;
+            x = min(x, lineArr[y]->currLen - 1);
+            break;
+        }
     }
 
     move(y, x);
