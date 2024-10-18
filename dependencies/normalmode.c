@@ -1,7 +1,9 @@
 #include "normalmode.h"
 #include "mem.h"
+#include "kb.h"
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include <ncurses/ncurses.h>
 
 
@@ -16,68 +18,113 @@ int checkCmd(char cmd[MAXCHARBUFLEN]) {
 }
 
 
+void getNormalModeInput(char *key, char cmd[MAXCHARBUFLEN]) {
+    int x_ = 0;
+    move(terminal_max_y, x_);
+    printw("gte>> ");
+    x_ = 6;
+
+    char c = 0;
+    c = getch();
+
+    if (c == ':') {
+        int i = 0;
+        while (c != K_RET) {
+            c = getch();
+            cmd[i++] = c;
+            move(terminal_max_y, x_);
+            addch(c);
+            x_ ++;
+            move(y, x);
+        }
+
+        *key = 0;
+        return ;
+
+    } else {
+        *key = c; 
+    }
+
+    return;    
+}
+
+
 void runNormalMode() {
     bool normalModeActive = true;
     char cmd[MAXCHARBUFLEN];
     int i = 0;
-    int n = 0;
     memset(cmd, 0, sizeof(char)*MAXCHARBUFLEN);
-    char c;
+    char c = -1;
 
     while (normalModeActive) {
-        printf("gte>> ");
-        scanf("%s", cmd);
-        checkCmd(cmd);
+        getNormalModeInput(&c, cmd);
 
-        n = checkCmd(cmd);
+        if (c == 0) {
+            // since c will remain 0 if cmd is not empty
+            switch (checkCmd(cmd)) {
+                case QUIT : {
+                    if (isDirty) printf("Cannot quit, unwritten changes exist\n");
+                    else {
+                        isRunning = false;
+                        normalModeActive = false;
+                        return;
+                    } 
+                    break;
+                }
 
-        switch (n) {
-            case QUIT : {
-                if (isDirty) printf("Cannot quit, unwritten changes exist\n");
-                else {
+                case WRITE : {
+                    if (isDirty) {
+                        writeFile();
+                        printf("Changes saved\n");
+                    } else printf("No changes to write\n");
+                    break;
+                }
+
+                case WRITE_QUIT : {
+                    if (isDirty) {
+                        writeFile();
+                        printf("Changes saved\n");
+                    }
                     isRunning = false;
                     normalModeActive = false;
                     return;
-                } 
-                break;
-            }
-
-            case WRITE : {
-                if (isDirty) {
-                    writeFile();
-                    printf("Changes saved\n");
-                } else printf("No changes to write\n");
-                break;
-            }
-
-            case WRITE_QUIT : {
-                if (isDirty) {
-                    writeFile();
-                    printf("Changes saved\n");
+                    break;
                 }
-                isRunning = false;
-                normalModeActive = false;
-                return;
-                break;
+
+                case NOWRITE_QUIT : {
+                    printf("Quitting without saving\n");
+                    isRunning = false;
+                    normalModeActive = false;
+                    return;
+                    break;
+                }
+
+                case INPUTMODE : {
+                    currentMode = STATE_INPUTMODE;
+                    normalModeActive = false;
+                    break;
+                }
+
+                default: {
+                    printf("Not a valid command %s\n", cmd);
+                    break;
+                }
             }
 
-            case NOWRITE_QUIT : {
-                printf("Quitting without saving\n");
-                isRunning = false;
-                normalModeActive = false;
-                return;
-                break;
-            }
-
-            case INPUTMODE : {
-                currentMode = STATE_INPUTMODE;
-                normalModeActive = false;
-                break;
-            }
-
-            default: {
-                printf("Not a valid command %s\n", cmd);
-                break;
+        } else {
+            c = toupper(c);
+            switch (c) {
+                case K_UP    : 
+                case K_RIGHT : 
+                case K_DOWN  : 
+                case K_LEFT  : {
+                    handleSpclCharPress(c);
+                    break;
+                }
+                 
+                default: {
+                    break;
+                }
             }
         }
     }

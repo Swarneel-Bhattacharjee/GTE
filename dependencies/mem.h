@@ -19,6 +19,11 @@ typedef struct Line{
     char* lineBuf;
 } line;
 
+
+int terminal_max_x;
+int terminal_max_y;
+
+
 char* filename;
 bool isDirty;
 bool isRunning;

@@ -6,13 +6,6 @@
 
 
 void runInputMode () {
-    initscr();
-    noecho();
-    scrollok(stdscr, TRUE);
-    clear(); 
-
-    fillScreen();
-
     bool inputModeActive = true;
     while (inputModeActive) {
         inputModeActive = handleKeypress();
