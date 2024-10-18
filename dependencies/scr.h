@@ -1,7 +1,7 @@
 #ifndef SCR_H
 #define SCR_H
 
-void loadFile();
+void fillScreen();
 
 void insertIntoCurrentLine(char ch);
 

@@ -1,24 +1,25 @@
-#include <stdio.h>
 #include "dependencies/mem.h"
 #include "dependencies/scr.h"
 #include "dependencies/kb.h"
+#include "dependencies/normalmode.h"
+#include "dependencies/inputmode.h"
 #include <stdbool.h>
 #include <ncurses/ncurses.h>
+#include <stdio.h>
+
 
 int main(int argc, char** argv) {
-
-    initscr();
-    noecho();
-    scrollok(stdscr, TRUE);
-
+    
     filename = argv[1];
+
     loadFile();
 
-    while (true) {
-        handleKeypress();
+    isRunning = true; 
+    while (isRunning) {
+        if (currentMode == STATE_NORMALMODE) runNormalMode();
+        if (currentMode == STATE_INPUTMODE) runInputMode();
     }
 
-    endwin();
-
+    clearMem();
     return 0;
 }

@@ -1,19 +1,18 @@
 #include <string.h>
+#include <stdbool.h>
 #include "kb.h"
 #include "scr.h"
 #include "mem.h"
 #include <stdlib.h>
 #include <ncurses/ncurses.h>
 
-void handleKeypress() {
+
+bool handleKeypress() {
     char c = getch();
 
     switch (c){
         case K_ESC : {
-            writeFile();
-            clearMem();
-            endwin();
-            exit(0);
+            return false; // false means to stop looping
             break;
         }
 
@@ -23,6 +22,7 @@ void handleKeypress() {
                 if (y == 0) break;
                 joinWithPrevLine(); 
             }
+            isDirty = true;
             break;
         }
 
@@ -31,12 +31,14 @@ void handleKeypress() {
             insertIntoCurrentLine(' ');
             insertIntoCurrentLine(' ');
             insertIntoCurrentLine(' ');
+            isDirty = true;
             break;
         }
 
         case K_RET : {
             insertIntoCurrentLine('\n');
             addNewLineUnder();
+            isDirty = true;
             break;
         }
 
@@ -48,9 +50,12 @@ void handleKeypress() {
 
         default : {
             insertIntoCurrentLine(c);
+            isDirty = true; 
             break;
         }
     }
+
+    return true; // true means keep looping
 }
 
 void handleSpclCharPress(char c) {

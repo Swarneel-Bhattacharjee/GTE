@@ -75,31 +75,26 @@ void addNewLineUnder() {
     nLines ++;
 } 
 
-void loadFile(){
-    FILE* f = fopen(filename, "r");
+void fillScreen(){
+    y = 0;
+    x = 0;
+    move(y, x);
 
-    char fileContentBuf[MAXCHARBUFLEN];
     char c;
-    memset(fileContentBuf, 0, sizeof(char) * MAXCHARBUFLEN);
-    int i = 0;
 
-    lineArr = (line**) malloc (sizeof(line*) * MAXLINEBUFLEN);
-    nPossibleLines = MAXLINEBUFLEN;
-    for (int k = 0; k < MAXLINEBUFLEN; k ++) {
-        lineArr[k] = Line();
+    while (y <= nLines - 1) {
+        while ((c = lineArr[y]->lineBuf[x]) != 0) {
+            insch(c);
+            x ++;
+            move(y, x);
+        }
+        y ++;
+        x = 0;
+        move(y, x);
     }
 
-    if (!f) {
-        printf("File %s not found, cannot read\n", filename);
-        return;
-    }
-
-    while ((c = getc(f)) != EOF) fileContentBuf[i++] = c;
-    fclose(f);
-
-    for (int j = 0; j < i; j ++) {
-        c = fileContentBuf[j];
-        insertIntoCurrentLine(c);
-        if (c == '\n') addNewLineUnder();
-    }
+    y --;
+    x = lineArr[y]->currLen - 1;
+    move(y, x);
+    return;
 }

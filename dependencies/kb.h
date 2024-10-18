@@ -55,7 +55,7 @@ enum ASCII {
     US, //Unit Separator
 };
 
-void handleKeypress();
+bool handleKeypress();
 void handleSpclCharPress(char c);
 
 #endif  // KB_H

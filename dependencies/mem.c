@@ -12,6 +12,43 @@ line* Line() {
     return l;
 }
 
+void loadFile() {
+    FILE* f = fopen(filename, "r");
+
+    char fileContentBuf[MAXCHARBUFLEN];
+    char c;
+    memset(fileContentBuf, 0, sizeof(char) * MAXCHARBUFLEN);
+    int i = 0;
+
+    lineArr = (line**) malloc (sizeof(line*) * MAXLINEBUFLEN);
+    nPossibleLines = MAXLINEBUFLEN;
+    for (int k = 0; k < MAXLINEBUFLEN; k ++) {
+        lineArr[k] = Line();
+    }
+
+    if (!f) {
+        printf("File %s not found, cannot read\n", filename);
+        return;
+    }
+
+    while ((c = getc(f)) != EOF) fileContentBuf[i++] = c;
+    fclose(f);
+
+    int j = 0;
+    while ((c = fileContentBuf[j++]) != 0) {
+        lineArr[y]->lineBuf[x++] = c;
+        lineArr[y]->currLen ++;
+        if (c == '\n') {
+            y ++;
+            x = 0;
+            nLines ++;
+        }
+    }
+
+    nLines = min(1, nLines);
+    return;
+}
+
 void writeFile(){
     FILE* f = fopen(filename, "w");
     if (!f) {
@@ -22,7 +59,8 @@ void writeFile(){
     for (int i = 0; i <= nLines; i ++) {    // the = sign should logically not be here
         fprintf(f, "%s", lineArr[i]->lineBuf);
     }
-
+    
+    isDirty = false;
     fclose(f);
 }
 

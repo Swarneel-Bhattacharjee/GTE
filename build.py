@@ -26,7 +26,8 @@ def build():
     buildtype = sys.argv[2]
 
     print(f"Building {filename}")
-    os.system(f"gcc main.c dependencies/scr.c dependencies/kb.c dependencies/mem.c -o {filename} -lncurses -g")
+    os.system(f"gcc main.c dependencies/scr.c dependencies/kb.c dependencies/mem.c dependencies/inputmode.c dependencies/normalmode.c \
+    -o {filename} -lncurses -g")
     print("done")
 
     if buildtype == "test": 
