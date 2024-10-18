@@ -68,7 +68,7 @@ void handleSpclCharPress(char c) {
         }
 
         case K_DOWN : {
-            if (y >= nLines) x = lineArr[y]->currLen - 1;
+            if (y >= nLines - 1) { x = lineArr[y]->currLen - 1; break;}
             y ++;
             x = min(x, lineArr[y]->currLen - 1);
             break;
