@@ -45,7 +45,6 @@ void loadFile() {
         }
     }
 
-    nLines = min(1, nLines);
     return;
 }
 
