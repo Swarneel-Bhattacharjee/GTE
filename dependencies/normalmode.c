@@ -25,58 +25,59 @@ void runNormalMode() {
     char c;
 
     while (normalModeActive) {
+        printf("gte>> ");
         scanf("%s", cmd);
         checkCmd(cmd);
 
         n = checkCmd(cmd);
-        {
-            switch (n) {
-                case QUIT : {
-                    if (isDirty) printf("Cannot quit, unwritten changes exist\n");
-                    else {
-                        isRunning = false;
-                        normalModeActive = false;
-                        return;
-                    } 
-                    break;
-                }
 
-                case WRITE : {
-                    if (isDirty) {
-                        writeFile();
-                        printf("Changes saved\n");
-                    } else printf("No changes to write\n");
-                    break;
-                }
-
-                case WRITE_QUIT : {
-                    if (isDirty) {
-                        writeFile();
-                        printf("Changes saved\n");
-                    }
+        switch (n) {
+            case QUIT : {
+                if (isDirty) printf("Cannot quit, unwritten changes exist\n");
+                else {
                     isRunning = false;
                     normalModeActive = false;
                     return;
-                    break;
-                }
+                } 
+                break;
+            }
 
-                case NOWRITE_QUIT : {
-                    printf("Quitting without saving\n");
-                    isRunning = false;
-                    normalModeActive = false;
-                    return;
-                    break;
-                }
+            case WRITE : {
+                if (isDirty) {
+                    writeFile();
+                    printf("Changes saved\n");
+                } else printf("No changes to write\n");
+                break;
+            }
 
-                case INPUTMODE : {
-                    currentMode = STATE_INPUTMODE;
-                    normalModeActive = false;
-                    break;
+            case WRITE_QUIT : {
+                if (isDirty) {
+                    writeFile();
+                    printf("Changes saved\n");
                 }
+                isRunning = false;
+                normalModeActive = false;
+                return;
+                break;
+            }
 
-                default: {
-                    break;
-                }
+            case NOWRITE_QUIT : {
+                printf("Quitting without saving\n");
+                isRunning = false;
+                normalModeActive = false;
+                return;
+                break;
+            }
+
+            case INPUTMODE : {
+                currentMode = STATE_INPUTMODE;
+                normalModeActive = false;
+                break;
+            }
+
+            default: {
+                printf("Not a valid command %s\n", cmd);
+                break;
             }
         }
     }
