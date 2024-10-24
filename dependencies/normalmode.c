@@ -126,8 +126,11 @@ void runNormalMode() {
             }
 
         } else {
-            c = toupper(c);
             switch (c) {
+                case 'h' : 
+                case 'j' :
+                case 'k' :
+                case 'l' :
                 case K_UP    : 
                 case K_RIGHT : 
                 case K_DOWN  : 
