@@ -84,7 +84,7 @@ void fillScreen(){
 
     while (y <= nLines - 1) {
         while ((c = lineArr[y]->lineBuf[x]) != 0) {
-            insch(c);
+            insch(c); // noecho() should be on here so no need to test for newline char
             x ++;
             move(y, x);
         }
@@ -93,8 +93,8 @@ void fillScreen(){
         move(y, x);
     }
 
-    y --;
-    x = lineArr[y]->currLen - 1;
+    y = 0;
+    x = 0;
     move(y, x);
     return;
 }

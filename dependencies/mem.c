@@ -12,6 +12,22 @@ line* Line() {
     return l;
 }
 
+void makeLines(char* fileContentBuf) {
+    int j = 0;
+    char c = -1;
+
+    while ((c = fileContentBuf[j++]) != 0) {
+        lineArr[y]->lineBuf[x++] = c;
+        lineArr[y]->currLen ++;
+        if (c == '\n') {
+            y ++;
+            x = 0;
+            nLines ++;
+        }
+    }
+}
+
+
 void loadFile() {
     FILE* f = fopen(filename, "r");
 
@@ -34,16 +50,7 @@ void loadFile() {
     while ((c = getc(f)) != EOF) fileContentBuf[i++] = c;
     fclose(f);
 
-    int j = 0;
-    while ((c = fileContentBuf[j++]) != 0) {
-        lineArr[y]->lineBuf[x++] = c;
-        lineArr[y]->currLen ++;
-        if (c == '\n') {
-            y ++;
-            x = 0;
-            nLines ++;
-        }
-    }
+    makeLines(fileContentBuf); 
 
     return;
 }
