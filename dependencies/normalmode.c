@@ -23,22 +23,25 @@ void getNormalModeInput(char *key, char cmd[MAXCHARBUFLEN]) {
     move(terminal_max_y, x_);
     printw("gte>> ");
     x_ = 6;
+    move(y, x);
 
     char c = 0;
     c = getch();
 
     if (c == ':') {
+        move(terminal_max_y, x_);
+        clrtoeol();
         int i = 0;
         while (c != K_RET) {
-            c = getch();
             cmd[i++] = c;
             move(terminal_max_y, x_);
             addch(c);
             x_ ++;
             move(y, x);
+            c = getch();
         }
 
-        *key = 0;
+        *key = -1;
         return ;
 
     } else {
@@ -49,21 +52,32 @@ void getNormalModeInput(char *key, char cmd[MAXCHARBUFLEN]) {
 }
 
 
+void printToCmdLine(char* str) {
+    int x_ = 0;
+    move(terminal_max_y, x_);
+    clrtoeol();
+    printw("gte>> ");
+    printw(str);
+    move(y, x);
+}
+
+
 void runNormalMode() {
     bool normalModeActive = true;
     char cmd[MAXCHARBUFLEN];
-    int i = 0;
     memset(cmd, 0, sizeof(char)*MAXCHARBUFLEN);
+    int i = 0;
     char c = -1;
 
     while (normalModeActive) {
+        memset(cmd, 0, sizeof(char)*MAXCHARBUFLEN);   
         getNormalModeInput(&c, cmd);
 
-        if (c == 0) {
-            // since c will remain 0 if cmd is not empty
+        if (c == -1) {
+            // since c will remain -1 if cmd is not empty
             switch (checkCmd(cmd)) {
                 case QUIT : {
-                    if (isDirty) printf("Cannot quit, unwritten changes exist\n");
+                    if (isDirty) printToCmdLine("Cannot quit, unwritten changes exist");
                     else {
                         isRunning = false;
                         normalModeActive = false;
@@ -75,15 +89,15 @@ void runNormalMode() {
                 case WRITE : {
                     if (isDirty) {
                         writeFile();
-                        printf("Changes saved\n");
-                    } else printf("No changes to write\n");
+                        printToCmdLine("Changes saved");
+                    } else printToCmdLine("No changes to write");
                     break;
                 }
 
                 case WRITE_QUIT : {
                     if (isDirty) {
                         writeFile();
-                        printf("Changes saved\n");
+                        printToCmdLine("Changes saved");
                     }
                     isRunning = false;
                     normalModeActive = false;
@@ -92,7 +106,7 @@ void runNormalMode() {
                 }
 
                 case NOWRITE_QUIT : {
-                    printf("Quitting without saving\n");
+                    printToCmdLine("Quitting without saving");
                     isRunning = false;
                     normalModeActive = false;
                     return;
@@ -106,7 +120,7 @@ void runNormalMode() {
                 }
 
                 default: {
-                    printf("Not a valid command %s\n", cmd);
+                    printToCmdLine("Not a valid command");
                     break;
                 }
             }
