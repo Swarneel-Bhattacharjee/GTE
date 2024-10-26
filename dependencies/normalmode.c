@@ -33,11 +33,20 @@ void getNormalModeInput(char *key, char cmd[MAXCHARBUFLEN]) {
         clrtoeol();
         int i = 0;
         while (c != K_RET) {
-            cmd[i++] = c;
-            move(terminal_max_y, x_);
-            addch(c);
-            x_ ++;
-            move(y, x);
+            if (c == K_BCKSPC) {
+                x_ --;
+                move(terminal_max_y, x_);
+                delch();
+                i --;
+                cmd[i] = 0;
+            } else {
+                cmd[i++] = c;
+                move(terminal_max_y, x_);
+                addch(c);
+                x_ ++;
+                move(y, x);
+            }
+
             c = getch();
         }
 

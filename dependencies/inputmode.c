@@ -12,5 +12,4 @@ void runInputMode () {
     }
 
     currentMode = STATE_NORMALMODE;
-    endwin();
 }
