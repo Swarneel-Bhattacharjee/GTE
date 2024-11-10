@@ -16,5 +16,6 @@ bool normalModeActive;
 
 int checkCmd(char cmd[MAXCHARBUFLEN]);
 void runNormalMode();
+void printToCmdLine(char* str);
 
 #endif // !NORMALMODE_H

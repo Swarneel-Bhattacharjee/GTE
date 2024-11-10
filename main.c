@@ -3,6 +3,7 @@
 #include "dependencies/kb.h"
 #include "dependencies/normalmode.h"
 #include "dependencies/inputmode.h"
+#include "dependencies/visualmode.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -49,6 +50,9 @@ int main(int argc, char** argv) {
 
     clear();
     noecho();
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_BLACK, COLOR_WHITE);
     loadFile();
     fillScreen();
 
@@ -57,6 +61,7 @@ int main(int argc, char** argv) {
     while (isRunning) {
         if (currentMode == STATE_NORMALMODE) runNormalMode();
         if (currentMode == STATE_INPUTMODE) runInputMode();
+        if (currentMode == STATE_VISUALMODE) runVisualMode();
     }
 
     clearMem();

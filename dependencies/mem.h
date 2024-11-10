@@ -11,6 +11,7 @@
 
 #define STATE_NORMALMODE 0
 #define STATE_INPUTMODE 1 
+#define STATE_VISUALMODE 2
 
 
 typedef struct Line{

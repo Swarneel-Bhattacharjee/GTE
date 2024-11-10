@@ -78,6 +78,7 @@ void runNormalMode() {
     int i = 0;
     char c = -1;
 
+    printToCmdLine("NORMALMODE");
     while (normalModeActive) {
         memset(cmd, 0, sizeof(char)*MAXCHARBUFLEN);   
         getNormalModeInput(&c, cmd);
@@ -148,6 +149,12 @@ void runNormalMode() {
                     break;
                 }
                  
+                case 'v' :{
+                    currentMode = STATE_VISUALMODE;
+                    normalModeActive = false;
+                    break;
+                }
+
                 default: {
                     break;
                 }

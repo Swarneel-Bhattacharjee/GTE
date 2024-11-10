@@ -27,6 +27,7 @@ def build():
 
     print(f"Building {filename}")
     os.system(f"gcc main.c dependencies/scr.c dependencies/kb.c dependencies/mem.c dependencies/inputmode.c dependencies/normalmode.c \
+    dependencies/visualmode.c \
     -o {filename} -lncurses -g")
     print("done")
 
